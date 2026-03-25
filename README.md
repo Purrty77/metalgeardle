@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Metal Gear Dle
 
 Lean PHP MVC MVP for a LoLdle-style Metal Gear guessing game, designed to run on shared hosting with PHP 8.x and MySQL/MariaDB.
@@ -39,3 +40,6 @@ Lean PHP MVC MVP for a LoLdle-style Metal Gear guessing game, designed to run on
 - Add close-match logic for selected fields
 - Add admin tooling to schedule future daily challenges
 - Add optional streaks once the anonymous local flow feels solid
+=======
+# metalgeardle
+>>>>>>> origin/main
