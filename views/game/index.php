@@ -14,13 +14,24 @@ $timezoneLabel = (string) (\App\Core\Config::get('app', 'timezone') ?? 'Europe/P
 $dailySolveCopy = $dailySolveCount === 1
     ? '1 player has already found today\'s character.'
     : sprintf('%d players have already found today\'s character.', $dailySolveCount);
+$yesterdayCharacterCopy = $yesterdayCharacterName !== null
+    ? sprintf('Yesterday\'s character was %s.', $yesterdayCharacterName)
+    : 'Yesterday\'s character will appear here once a second daily challenge has run.';
 ?>
 <main class="page-shell">
     <section class="hero">
-        <p class="eyebrow">Classic Mode</p>
+        <div class="hero-topline">
+            <p class="eyebrow">Classic Mode</p>
+            <div class="streak-badge" aria-label="Current streak">
+                <span class="streak-badge__star" aria-hidden="true">★</span>
+                <span class="streak-badge__label">Streak</span>
+                <span class="streak-badge__count" id="streak-count">0</span>
+            </div>
+        </div>
         <h1>Metal Gear Dle</h1>
         <p class="lede">Guess the character of the day and compare six gameplay-friendly attributes.</p>
         <p class="hero-note" id="daily-solves-copy"><?= htmlspecialchars($dailySolveCopy, ENT_QUOTES, 'UTF-8') ?></p>
+        <p class="hero-subnote"><?= htmlspecialchars($yesterdayCharacterCopy, ENT_QUOTES, 'UTF-8') ?></p>
     </section>
 
     <?php if (!empty($error)): ?>

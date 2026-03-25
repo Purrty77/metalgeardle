@@ -24,6 +24,9 @@ $baseUrl = rtrim((string) (Config::get('app', 'base_url') ?? ''), '/');
                 <p>
                     Follow the project, share feedback, or keep building the roster on GitHub.
                 </p>
+                <p class="site-footer__repo-link">
+                    <a href="https://github.com/Purrty77/metalgeardle" target="_blank" rel="noreferrer">View the repository</a>
+                </p>
             </div>
 
             <div class="site-footer__column site-footer__column--links">

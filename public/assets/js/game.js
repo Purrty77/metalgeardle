@@ -9,10 +9,12 @@
     const dailyResetHour = Number(config.dailyResetHour || 16);
     const storagePrefix = 'metalgeardle:';
     const solverTokenKey = 'metalgeardle:solver-token';
+    const streakKey = 'metalgeardle:streak';
     const searchPanel = document.querySelector('.panel-search');
     const nextChallengePanel = document.querySelector('#next-challenge-panel');
     const nextChallengeTimer = document.querySelector('#next-challenge-timer');
     const dailySolvesCopy = document.querySelector('#daily-solves-copy');
+    const streakCount = document.querySelector('#streak-count');
     const form = document.querySelector('#guess-form');
     const input = document.querySelector('#guess');
     const suggestions = document.querySelector('#search-suggestions');
@@ -30,7 +32,7 @@
     let lastRenderedCount = 0;
     let activeSuggestionIndex = -1;
 
-    if (!searchPanel || !nextChallengePanel || !nextChallengeTimer || !dailySolvesCopy || !form || !input || !suggestions || !errorBox || !attemptCount || !emptyState || !resultsWrap || !resultsBody || !winModal || !winModalImage || !winModalName || !winModalClose) {
+    if (!searchPanel || !nextChallengePanel || !nextChallengeTimer || !dailySolvesCopy || !streakCount || !form || !input || !suggestions || !errorBox || !attemptCount || !emptyState || !resultsWrap || !resultsBody || !winModal || !winModalImage || !winModalName || !winModalClose) {
         return;
     }
 
@@ -175,6 +177,77 @@
     const formatDailySolvesCopy = (count) => count === 1
         ? "1 player has already found today's character."
         : `${count} players have already found today's character.`;
+
+    const parseChallengeDate = (challengeDate) => {
+        const [year, month, day] = String(challengeDate).split('-').map(Number);
+        return Date.UTC(year, month - 1, day);
+    };
+
+    const readStreakState = () => {
+        try {
+            const raw = JSON.parse(localStorage.getItem(streakKey) || '{}');
+            return {
+                count: Number.isInteger(raw.count) ? raw.count : 0,
+                lastWinDate: typeof raw.lastWinDate === 'string' ? raw.lastWinDate : null,
+            };
+        } catch (error) {
+            return {
+                count: 0,
+                lastWinDate: null,
+            };
+        }
+    };
+
+    const writeStreakState = (state) => {
+        localStorage.setItem(streakKey, JSON.stringify(state));
+    };
+
+    const normalizeStreakState = () => {
+        const state = readStreakState();
+
+        if (!state.lastWinDate) {
+            return state;
+        }
+
+        const diffDays = Math.round((parseChallengeDate(config.challengeDate) - parseChallengeDate(state.lastWinDate)) / 86400000);
+
+        if (diffDays > 1) {
+            const resetState = {
+                count: 0,
+                lastWinDate: state.lastWinDate,
+            };
+            writeStreakState(resetState);
+            return resetState;
+        }
+
+        return state;
+    };
+
+    const updateStreakBadge = () => {
+        const state = normalizeStreakState();
+        streakCount.textContent = String(Math.max(0, state.count));
+    };
+
+    const registerWinForStreak = () => {
+        const state = normalizeStreakState();
+
+        if (state.lastWinDate === config.challengeDate) {
+            updateStreakBadge();
+            return;
+        }
+
+        const diffDays = state.lastWinDate
+            ? Math.round((parseChallengeDate(config.challengeDate) - parseChallengeDate(state.lastWinDate)) / 86400000)
+            : null;
+
+        const nextState = {
+            count: diffDays === 1 ? state.count + 1 : 1,
+            lastWinDate: config.challengeDate,
+        };
+
+        writeStreakState(nextState);
+        updateStreakBadge();
+    };
 
     const updateDailySolvesCopy = (count) => {
         dailySolvesCopy.textContent = formatDailySolvesCopy(count);
@@ -396,7 +469,7 @@
             .reverse()
             .map((entry) => `
                 <tr>
-                    <td class="${entry.comparison.name === 'correct' ? 'status-correct' : 'status-incorrect'}">
+                    <td class="guess-cell">
                         <div class="guess-character">
                             ${entry.guess.image_small ? `<img src="${escapeHtml(entry.guess.image_small)}" alt="" class="guess-thumb">` : '<span class="guess-thumb guess-thumb-placeholder"></span>'}
                             <span>${escapeHtml(entry.guess.name)}</span>
@@ -428,11 +501,13 @@
             if (winningEntry) {
                 const revealDelay = ((7 - 1) * animationStagger) + animationDuration;
                 window.setTimeout(() => {
+                    registerWinForStreak();
                     hideSearchPanel();
                     openWinModal(winningEntry);
                 }, revealDelay);
             }
         } else if (winningEntry) {
+            registerWinForStreak();
             hideSearchPanel();
         } else {
             showSearchPanel();
@@ -522,6 +597,7 @@
 
     lastRenderedCount = readStoredCount();
     updateDailySolvesCopy(Number(config.dailySolveCount || 0));
+    updateStreakBadge();
     scheduleDailyReset();
     updateNextChallengeTimer();
     window.setInterval(updateNextChallengeTimer, 1000);

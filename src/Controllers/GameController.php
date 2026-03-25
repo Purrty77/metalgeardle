@@ -19,14 +19,19 @@ final class GameController
         $challenge = null;
         $characters = [];
         $dailySolveCount = 0;
+        $yesterdayCharacterName = null;
         $baseUrl = (string) (Config::get('app', 'base_url') ?? '');
 
         try {
             $dailyChallenges = new DailyChallengeRepository();
             $charactersRepository = new CharacterRepository();
             $challenge = $dailyChallenges->ensureCurrent();
+            $previousChallenge = $dailyChallenges->findPrevious();
             $characters = $charactersRepository->all();
             $dailySolveCount = $challenge !== null ? $dailyChallenges->countSolves($challenge->id) : 0;
+            $yesterdayCharacterName = $previousChallenge !== null
+                ? $charactersRepository->findById($previousChallenge->characterId)?->name
+                : null;
         } catch (Throwable $exception) {
             $error = 'Database connection failed. Update your DB settings before playing.';
         }
@@ -36,6 +41,7 @@ final class GameController
             'challenge' => $challenge,
             'characters' => $characters,
             'dailySolveCount' => $dailySolveCount,
+            'yesterdayCharacterName' => $yesterdayCharacterName,
             'error' => $error,
             'baseUrl' => $baseUrl,
         ]);

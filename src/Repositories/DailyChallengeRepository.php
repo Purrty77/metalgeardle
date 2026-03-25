@@ -56,6 +56,33 @@ final class DailyChallengeRepository
         return $this->findByDate($this->currentChallengeDate(), $mode);
     }
 
+    public function findPrevious(string $mode = 'classic'): ?DailyChallenge
+    {
+        $statement = $this->pdo->prepare(
+            'SELECT *
+             FROM daily_challenges
+             WHERE mode = :mode AND date < :date
+             ORDER BY date DESC
+             LIMIT 1'
+        );
+        $statement->execute([
+            'mode' => $mode,
+            'date' => $this->currentChallengeDate(),
+        ]);
+        $row = $statement->fetch();
+
+        if (!$row) {
+            return null;
+        }
+
+        return new DailyChallenge(
+            (int) $row['id'],
+            (string) $row['date'],
+            (int) $row['character_id'],
+            (string) $row['mode']
+        );
+    }
+
     public function countSolves(int $challengeId): int
     {
         $statement = $this->pdo->prepare(

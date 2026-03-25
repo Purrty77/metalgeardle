@@ -40,6 +40,46 @@ body {
 .hero {
     margin-bottom: 28px;
 }
+.hero-topline {
+    margin-bottom: 8px;
+}
+
+.streak-badge {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 220;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 16px;
+    border: 1px solid rgba(183, 136, 42, 0.3);
+    border-radius: 999px;
+    background: rgba(255, 248, 226, 0.94);
+    box-shadow: 0 18px 36px rgba(96, 77, 28, 0.14);
+    color: #7b5b12;
+    font-weight: 800;
+    backdrop-filter: blur(8px);
+}
+
+.streak-badge__star {
+    color: #c6941a;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.streak-badge__label {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.72rem;
+}
+
+.streak-badge__count {
+    min-width: 1.6ch;
+    font-size: 1.05rem;
+    font-variant-numeric: tabular-nums;
+}
+
 
 .eyebrow {
     margin: 0 0 10px;
@@ -76,8 +116,15 @@ h1 {
 .hero-note {
     max-width: 720px;
     margin-bottom: 0;
-    color: #39513a;
+    color: #b7882a;
     font-weight: 700;
+}
+
+.hero-subnote {
+    max-width: 720px;
+    margin-top: 8px;
+    margin-bottom: 0;
+    color: #4c6550;
 }
 
 .panel {
@@ -171,6 +218,15 @@ h1 {
     object-fit: cover;
     flex: 0 0 auto;
     background: rgba(111, 159, 66, 0.12);
+}
+
+.guess-thumb {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: block;
+    transform: scale(1.35);
+    transform-origin: center;
 }
 
 .suggestion-thumb-placeholder,
@@ -287,6 +343,11 @@ button {
     gap: 12px;
 }
 
+.guess-cell {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: var(--text);
+}
+
 .status-correct {
     background: linear-gradient(135deg, #8dc63f 0%, #5f9a2f 100%) !important;
     color: #f7fff1;
@@ -327,6 +388,10 @@ button {
     .reveal-card {
         grid-template-columns: 1fr;
         display: grid;
+    }
+
+    .hero-topline {
+        align-items: start;
     }
 
     .results-head {
@@ -466,6 +531,20 @@ body.modal-open {
     font-size: clamp(1.9rem, 3vw, 2.6rem);
     line-height: 1.02;
 }
+.site-footer__repo-link {
+    margin-top: 14px;
+    margin-bottom: 0;
+}
+
+.site-footer__repo-link a {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 14px;
+    border: 1px solid rgba(219, 236, 198, 0.16);
+    border-radius: 14px;
+    background: rgba(249, 255, 244, 0.08);
+}
+
 
 .site-footer__column--links {
     display: grid;
