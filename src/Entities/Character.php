@@ -15,8 +15,10 @@ final class Character
         public readonly string $firstGame,
         public readonly string $era,
         public readonly string $roleType,
+        public readonly ?string $codecFrequency = null,
         public readonly ?string $imageSmall = null,
-        public readonly ?string $imageLarge = null
+        public readonly ?string $imageLarge = null,
+        public readonly array $aliases = []
     ) {
     }
 
@@ -34,8 +36,10 @@ final class Character
             'first_game' => $this->firstGame,
             'era' => $this->era,
             'role_type' => $this->roleType,
+            'codec_frequency' => $this->codecFrequency,
             'image_small' => $this->imageSmall,
             'image_large' => $this->imageLarge,
+            'aliases' => $this->aliases,
         ];
     }
 }

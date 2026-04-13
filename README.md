@@ -31,7 +31,7 @@ Lean PHP MVC MVP for a LoLdle-style Metal Gear guessing game, designed to run on
 
 - Daily classic challenge lookup from the database
 - Automatic daily challenge generation with a 4:00 PM Europe/Paris rollover
-- Random daily character selection that avoids the previous 4 days
+- Random daily character selection that avoids the previous 15 days
 - Character guesses by main name or alias
 - Attribute comparison for gameplay-focused fields
 - Guess history stored in browser `localStorage` per challenge date

@@ -13,7 +13,9 @@ $router = new Router($basePath);
 $gameController = new GameController();
 
 $router->get('/', [$gameController, 'index']);
+$router->get('/share-card', [$gameController, 'shareCard']);
 $router->get('/privacy-policy', [$gameController, 'privacy']);
 $router->post('/guess', [$gameController, 'guess']);
+$router->post('/suggestion', [$gameController, 'suggestion']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');

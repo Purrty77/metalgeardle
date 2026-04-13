@@ -5,12 +5,39 @@ declare(strict_types=1);
 use App\Core\Config;
 
 $baseUrl = rtrim((string) (Config::get('app', 'base_url') ?? ''), '/');
+$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host = (string) ($_SERVER['HTTP_HOST'] ?? 'metalgeardle.com');
+$requestUri = (string) ($_SERVER['REQUEST_URI'] ?? '/');
+$currentUrl = $scheme . '://' . $host . $requestUri;
+$pageTitle = (string) ($title ?? 'Metal Gear Dle');
+$pageDescription = (string) ($metaDescription ?? 'Guess the Metal Gear character of the day in a LoLdle-style browser game with daily resets, streaks, and tactical attribute comparisons.');
+$pageCanonical = (string) ($canonicalUrl ?? $currentUrl);
+$pageRobots = (string) ($metaRobots ?? 'index,follow');
+$defaultSocialImage = $scheme . '://' . $host . (($baseUrl !== '' ? $baseUrl : '') . '/public/assets/img/social-card-home.png');
+$pageImage = (string) ($ogImageUrl ?? $defaultSocialImage);
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($title ?? 'Metal Gear Dle', ENT_QUOTES, 'UTF-8') ?></title>
+    <title><?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?></title>
+    <meta name="description" content="<?= htmlspecialchars($pageDescription, ENT_QUOTES, 'UTF-8') ?>">
+    <meta name="robots" content="<?= htmlspecialchars($pageRobots, ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="canonical" href="<?= htmlspecialchars($pageCanonical, ENT_QUOTES, 'UTF-8') ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?>">
+    <meta property="og:description" content="<?= htmlspecialchars($pageDescription, ENT_QUOTES, 'UTF-8') ?>">
+    <meta property="og:url" content="<?= htmlspecialchars($pageCanonical, ENT_QUOTES, 'UTF-8') ?>">
+    <meta property="og:site_name" content="Metal Gear Dle">
+    <meta property="og:image" content="<?= htmlspecialchars($pageImage, ENT_QUOTES, 'UTF-8') ?>">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?>">
+    <meta name="twitter:description" content="<?= htmlspecialchars($pageDescription, ENT_QUOTES, 'UTF-8') ?>">
+    <meta name="twitter:image" content="<?= htmlspecialchars($pageImage, ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="icon" type="image/png" sizes="48x48" href="<?= htmlspecialchars(($baseUrl !== "" ? $baseUrl : "") . '/public/assets/img/favicon-48x48.png', ENT_QUOTES, 'UTF-8') ?>">
+    <link rel="shortcut icon" href="<?= htmlspecialchars(($baseUrl !== "" ? $baseUrl : "") . '/public/assets/img/favicon-48x48.png', ENT_QUOTES, 'UTF-8') ?>">
     <link rel="stylesheet" href="<?= htmlspecialchars(($baseUrl !== '' ? $baseUrl : '') . '/public/assets/css/app.css', ENT_QUOTES, 'UTF-8') ?>">
 </head>
 <body>
@@ -19,22 +46,23 @@ $baseUrl = rtrim((string) (Config::get('app', 'base_url') ?? ''), '/');
     <footer class="site-footer">
         <div class="site-footer__inner">
             <div class="site-footer__column site-footer__column--brand">
-                <p class="site-footer__eyebrow">Metal Gear Dle</p>
-                <h2>Daily tactical guesses with a sharper, lighter finish.</h2>
+                <p class="site-footer__eyebrow">Transmission Archive</p>
+                <h3>Support the Project</h3>
                 <p>
-                    Follow the project, share feedback, or keep building the roster on GitHub.
+                    Tips are optional and go only toward paying the hosting costs for Metal Gear Dle.
                 </p>
                 <p class="site-footer__repo-link">
-                    <a href="https://github.com/Purrty77/metalgeardle" target="_blank" rel="noreferrer">View the repository</a>
+                    <a href="https://ko-fi.com/purrty77" target="_blank" rel="noreferrer">
+                        <span class="kofi-link-mark" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false">
+                                <path d="M4 6.5A1.5 1.5 0 0 1 5.5 5h9A1.5 1.5 0 0 1 16 6.5V7h1.5A3.5 3.5 0 0 1 21 10.5c0 1.76-1.3 3.22-3 3.46A5 5 0 0 1 13 18H8a5 5 0 0 1-5-5V6.5Zm12 2V11a2 2 0 0 0 0 .24 1.99 1.99 0 0 0 0 .27c.86-.22 1.5-1 1.5-1.94A1.5 1.5 0 0 0 16 8.5Z" fill="currentColor"/>
+                                <path d="M12 9.15c.46-.75 1.9-.63 1.9.65 0 1.53-1.9 3.15-1.9 3.15s-1.9-1.62-1.9-3.15c0-1.28 1.44-1.4 1.9-.65Z" fill="#0d1614"/>
+                            </svg>
+                        </span>
+                        <span>Support the hosting on Ko-fi</span>
+                    </a>
                 </p>
-            </div>
-
-            <div class="site-footer__column site-footer__column--links">
-                <h3>Project Info</h3>
-                <p>
-                    Essential browser storage is used for daily gameplay only. Read the full policy for the current setup and how this should evolve if ads or analytics are added later.
-                </p>
-                <nav class="site-footer__nav" aria-label="Footer">
+                <p class="site-footer__repo-link">
                     <a href="https://github.com/purrty77" target="_blank" rel="noreferrer">
                         <span class="github-link-mark" aria-hidden="true">
                             <svg viewBox="0 0 24 24" focusable="false">
@@ -43,9 +71,33 @@ $baseUrl = rtrim((string) (Config::get('app', 'base_url') ?? ''), '/');
                         </span>
                         <span>GitHub</span>
                     </a>
+                </p>
+            </div>
+
+            <div class="site-footer__column site-footer__column--links">
+                <h3>Mission Data</h3>
+                <p>
+                    Patch notes, feedback, and privacy controls for the live build.
+                </p>
+                <nav class="site-footer__nav" aria-label="Footer">
+                    <button type="button" class="site-footer__button" id="updates-modal-button">
+                        <span class="github-link-mark" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false">
+                                <path d="M6 5h12v2H6V5Zm0 6h12v2H6v-2Zm0 6h8v2H6v-2Zm11-1.5 1.6 1.6 3.4-3.4 1.4 1.4-4.8 4.8-3-3 1.4-1.4Z" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <span>Patch Notes</span>
+                    </button>
+                    <button type="button" class="site-footer__button site-footer__button--highlight" id="suggestion-modal-button">
+                        <span class="github-link-mark" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false">
+                                <path d="M4 5h16v11H7.5L4 19.5V5Zm2 2v7.67L6.67 14H18V7H6Zm2 2h8v2H8V9Zm0 4h5v2H8v-2Z" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <span>Send Suggestion</span>
+                    </button>
                     <a href="<?= htmlspecialchars($baseUrl !== '' ? $baseUrl . '/privacy-policy' : '/privacy-policy', ENT_QUOTES, 'UTF-8') ?>">Privacy Policy</a>
                 </nav>
-                <p class="site-footer__credit">Background artwork credit: Dragoth from the <a href="https://forums.spacebattles.com/" target="_blank" rel="noreferrer">SpaceBattles.com</a> forum.</p>
             </div>
         </div>
     </footer>
