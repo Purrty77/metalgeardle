@@ -56,6 +56,11 @@ final class DailyChallengeRepository
         return $this->findByDate($this->currentChallengeDate(), $mode);
     }
 
+    public function currentDateKey(): string
+    {
+        return $this->currentChallengeDate();
+    }
+
     public function findPrevious(string $mode = 'classic'): ?DailyChallenge
     {
         $statement = $this->pdo->prepare(
@@ -141,7 +146,7 @@ final class DailyChallengeRepository
         return $now->format('Y-m-d');
     }
 
-    private function pickCharacterId(string $challengeDate, string $mode, int $lookbackDays = 4): ?int
+    private function pickCharacterId(string $challengeDate, string $mode, int $lookbackDays = 15): ?int
     {
         $recentStatement = $this->pdo->prepare(
             'SELECT character_id

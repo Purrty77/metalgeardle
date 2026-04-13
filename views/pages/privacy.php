@@ -14,7 +14,7 @@ declare(strict_types=1);
         <p>
             Metal Gear Dle stores your guesses in your browser so the current daily run feels consistent while you play.
             That information is kept on your device, is not meant to identify you personally, and is cleared when the daily
-            challenge rolls over at 4:00 PM in the game&apos;s configured timezone.
+            challenge rolls over at 6:00 AM in the game&apos;s configured timezone.
         </p>
     </section>
 

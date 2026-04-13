@@ -2,3 +2,5 @@
 Thumbs.db
 node_modules/
 .env
+config/database.php
+database/metalgeardle.sql
